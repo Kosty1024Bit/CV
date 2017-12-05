@@ -33,18 +33,18 @@ IplImage* fin = 0;
 IplImage* sv = 0;
 
 int main(int argc, char* argv[]){
-	// имя картинки задаётся первым параметром
+	// ГЁГ¬Гї ГЄГ Г°ГІГЁГ­ГЄГЁ Г§Г Г¤Г ВёГІГ±Гї ГЇГҐГ°ГўГ»Г¬ ГЇГ Г°Г Г¬ГҐГІГ°Г®Г¬
 	char* filename = argc == 2 ? argv[1] : "car.jpg";
-	// получаем картинку
+	// ГЇГ®Г«ГіГ·Г ГҐГ¬ ГЄГ Г°ГІГЁГ­ГЄГі
 	image = cvLoadImage(filename, CV_LOAD_IMAGE_COLOR);
 
 	fin = cvCloneImage(image);
 
-	// создаём одноканальные картинки
+	// Г±Г®Г§Г¤Г ВёГ¬ Г®Г¤Г­Г®ГЄГ Г­Г Г«ГјГ­Г»ГҐ ГЄГ Г°ГІГЁГ­ГЄГЁ
 	gray = cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
 	dst = cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
 
-	// преобразуем в градации серого
+	// ГЇГ°ГҐГ®ГЎГ°Г Г§ГіГҐГ¬ Гў ГЈГ°Г Г¤Г Г¶ГЁГЁ Г±ГҐГ°Г®ГЈГ®
 	cvCvtColor(image, gray, CV_RGB2GRAY);
 
 	sobel = cvCreateImage(cvGetSize(gray), IPL_DEPTH_8U, 1);
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]){
 		}
 	}
 
-	// получаем границы
+	// ГЇГ®Г«ГіГ·Г ГҐГ¬ ГЈГ°Г Г­ГЁГ¶Г»
 	cvCanny(sobel, dst, 10, 100, 3);
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@//
@@ -141,32 +141,6 @@ int main(int argc, char* argv[]){
 		}
 	}
 
-	//cout << "@@@@@@@@@@@@@@@@@ FIN @@@@@@@@@@@@@@@@" << endl;
-	//for (int y = 0; y < fin->height; y++) {
-	//	uchar* ptr_fin = (uchar*)(fin->imageData + y * fin->widthStep);
-	//	for (int x = 0; x < fin->width; x++) {
-	//		printf("%d %d %d| ", ptr_fin[3 * x + 0], ptr_fin[3 * x + 1], ptr_fin[3 * x + 2]);
-	//	}cout << endl;
-	//}
-	//cout << "@@@@@@@@@@@@@@@@@ FIN @@@@@@@@@@@@@@@@" << endl;
-
-	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@//
-	
-	//for (int y = 0; y < image->height; y++) {
-	//	uchar* ptr = (uchar*)(image->imageData + y * image->widthStep);
-	//	for (int x = 0; x < image->width; x++) {
-	//		printf("%d %d %d| ", ptr[3 * x + 0], ptr[3 * x + 1], ptr[3 * x + 2]);}cout << endl;}
-	//
-	//for (int y = 0; y < gray->height; y++) {
-	//	uchar* ptr = (uchar*)(gray->imageData + y * gray->widthStep);
-	//	for (int x = 0; x < gray->width; x++) {
-	//		printf("%d| ", ptr[x]);}cout << endl;}
-	//
-	//for (int y = 0; y < dst->height; y++) {
-	//	uchar* ptr = (uchar*)(dst->imageData + y * dst->widthStep);
-	//	for (int x = 0; x < dst->width; x++) {
-	//		printf("%d| ", ptr[x]);}cout << endl;}
-
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@//
 	sv = cvCloneImage(fin);
 
@@ -211,14 +185,14 @@ int main(int argc, char* argv[]){
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@//
 
-	// окно для отображения картинки
+	// Г®ГЄГ­Г® Г¤Г«Гї Г®ГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГї ГЄГ Г°ГІГЁГ­ГЄГЁ
 	cvNamedWindow("original", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow("gray", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow("cvCanny", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow("fin", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow("sv", CV_WINDOW_AUTOSIZE);
 
-	// показываем картинки
+	// ГЇГ®ГЄГ Г§Г»ГўГ ГҐГ¬ ГЄГ Г°ГІГЁГ­ГЄГЁ
 	cvShowImage("original", image);
 	cvShowImage("gray", gray);
 	cvShowImage("cvCanny", dst);
@@ -232,379 +206,14 @@ int main(int argc, char* argv[]){
 	cvShowImage("sobel_y", sobel_y);
 	cvShowImage("sobel", sobel);
 
-	// ждём нажатия клавиши
+	// Г¦Г¤ВёГ¬ Г­Г Г¦Г ГІГЁГї ГЄГ«Г ГўГЁГёГЁ
 	cvWaitKey(0);
 
-	// освобождаем ресурсы
+	// Г®Г±ГўГ®ГЎГ®Г¦Г¤Г ГҐГ¬ Г°ГҐГ±ГіГ°Г±Г»
 	cvReleaseImage(&image);
 	cvReleaseImage(&gray);
 	cvReleaseImage(&dst);
-	// удаляем окна
+	// ГіГ¤Г Г«ГїГҐГ¬ Г®ГЄГ­Г 
 	cvDestroyAllWindows();
 	return 0;
 }
-
-void test_img(){
-	Mat im = imread("C:/Users/Пухкий Константин/Desktop/Test_OpenCV_001/Test.jpg");
-	if (im.empty()) cout << "Cannot load image!" << endl;
-	imshow("Test image", im);}
-
-void test_video_cam(){
-	VideoCapture cap(0); // open the video camera no. 0
-
-	if (!cap.isOpened()){  // if not success, exit program
-		cout << "Cannot open the video cam" << endl;
-	}
-
-	double dWidth = cap.get(CV_CAP_PROP_FRAME_WIDTH); //get the width of frames of the video
-	double dHeight = cap.get(CV_CAP_PROP_FRAME_HEIGHT); //get the height of frames of the video
-
-	cout << "Frame size : " << dWidth << " x " << dHeight << endl;
-
-	namedWindow("MyVideo", CV_WINDOW_AUTOSIZE); //create a window called "MyVideo"
-
-	Mat frame;
-
-	while (1){
-
-		bool bSuccess = cap.read(frame); // read a new frame from video
-
-		if (!bSuccess){ //if not success, break loop
-			cout << "Cannot read a frame from video stream" << endl;
-			getchar();
-			break;
-		}
-
-		imshow("MyVideo", frame); //show the frame in "MyVideo" window
-
-		if (waitKey(30) == 27){ //wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
-			cout << "esc key is pressed by user" << endl;
-			break;
-		}
-	}
-
-}
-
-void test_red_obj_trac(){
-	VideoCapture cap(0); //capture the video from webcam
-
-	if (!cap.isOpened())  // if not success, exit program
-	{
-		cout << "Cannot open the web cam" << endl;
-	}
-
-	namedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
-
-	int iLowH = 170;
-	int iHighH = 179;
-
-	int iLowS = 150;
-	int iHighS = 255;
-
-	int iLowV = 60;
-	int iHighV = 255;
-
-	//Create trackbars in "Control" window
-	createTrackbar("LowH", "Control", &iLowH, 179); //Hue (0 - 179)
-	createTrackbar("HighH", "Control", &iHighH, 179);
-
-	createTrackbar("LowS", "Control", &iLowS, 255); //Saturation (0 - 255)
-	createTrackbar("HighS", "Control", &iHighS, 255);
-
-	createTrackbar("LowV", "Control", &iLowV, 255);//Value (0 - 255)
-	createTrackbar("HighV", "Control", &iHighV, 255);
-
-	int iLastX = -1;
-	int iLastY = -1;
-
-	//Capture a temporary image from the camera
-	Mat imgTmp;
-	cap.read(imgTmp);
-
-	//Create a black image with the size as the camera output
-	Mat imgLines = Mat::zeros(imgTmp.size(), CV_8UC3);;
-
-
-	while (true)
-	{
-		Mat imgOriginal;
-
-		bool bSuccess = cap.read(imgOriginal); // read a new frame from video
-
-		if (!bSuccess) //if not success, break loop
-		{
-			cout << "Cannot read a frame from video stream" << endl;
-			break;
-		}
-
-		Mat imgHSV;
-
-		cvtColor(imgOriginal, imgHSV, COLOR_BGR2HSV); //Convert the captured frame from BGR to HSV
-
-		Mat imgThresholded;
-
-		inRange(imgHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgThresholded); //Threshold the image
-
-		//morphological opening (removes small objects from the foreground)
-		erode(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
-		dilate(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
-
-		//morphological closing (removes small holes from the foreground)
-		dilate(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
-		erode(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
-
-		//Calculate the moments of the thresholded image
-		Moments oMoments = moments(imgThresholded);
-
-		double dM01 = oMoments.m01;
-		double dM10 = oMoments.m10;
-		double dArea = oMoments.m00;
-
-		// if the area <= 10000, I consider that the there are no object in the image and it's because of the noise, the area is not zero 
-		if (dArea > 10000)
-		{
-			//calculate the position of the ball
-			int posX = dM10 / dArea;
-			int posY = dM01 / dArea;
-
-			if (iLastX >= 0 && iLastY >= 0 && posX >= 0 && posY >= 0)
-			{
-				//Draw a red line from the previous point to the current point
-				line(imgLines, Point(posX, posY), Point(iLastX, iLastY), Scalar(0, 0, 255), 2);
-			}
-
-			iLastX = posX;
-			iLastY = posY;
-		}
-
-		imshow("Thresholded Image", imgThresholded); //show the thresholded image
-
-		imgOriginal = imgOriginal + imgLines;
-		imshow("Original", imgOriginal); //show the original image
-
-		if (waitKey(30) == 27) //wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
-		{
-			cout << "esc key is pressed by user" << endl;
-			break;
-		}
-	}
-}
-
-void test_img_pol(){
-	Mat im_in = imread("C:/Users/Пухкий Константин/Desktop/Test_OpenCV_001/Test_2.jpg");
-	if (im_in.empty()) cout << "Cannot load image!" << endl;
-	int x = im_in.cols, y = im_in.rows;
-	cout << x << " " << y;
-	imshow("Test image", im_in);
-
-	Mat im_pol = im_in;
-	usi pol = 0;
-	for (usi i = 0; i < y; i++){
-		for (usi j = 0; j < x; j++){
-			pol = (im_pol.at<Vec3b>(i, j)[0]) + (im_pol.at<Vec3b>(i, j)[1]) + (im_pol.at<Vec3b>(i, j)[2]);
-			pol /= 3;
-			im_pol.at<Vec3b>(i, j)[0] = pol;
-			im_pol.at<Vec3b>(i, j)[1] = pol;
-			im_pol.at<Vec3b>(i, j)[2] = pol;
-		}
-	}
-	imshow("Test pol image", im_pol);
-	waitKey(0);
-
-	Mat im_gr = im_pol;
-}
-
-static void sobel_core(si XC[3][3], si YC[3][3]){
-	XC[0][0] = -1, XC[0][1] = 0, XC[0][2] = 1;
-	XC[1][0] = -2, XC[1][1] = 0, XC[1][2] = 2;
-	XC[2][0] = -1, XC[2][1] = 0, XC[2][2] = 1;
-
-	YC[0][0] = 1, YC[0][1] = 2, YC[0][2] = 1;
-	YC[1][0] = 0, YC[1][1] = 0, YC[1][2] = 0;
-	YC[2][0] = -1, YC[2][1] = -2, YC[2][2] = -1;
-}
-
-static void sharr_core(si XC[3][3], si YC[3][3]){
-	XC[0][0] = 3, XC[0][1] = 10, XC[0][2] = 3;
-	XC[1][0] = 0, XC[1][1] = 0, XC[1][2] = 0;
-	XC[2][0] = -3, XC[2][1] = -10, XC[2][2] = -3;
-
-	YC[0][0] = 3, YC[0][1] = 0, YC[0][2] = -3;
-	YC[1][0] = 10, YC[1][1] = 0, YC[1][2] = -10;
-	YC[2][0] = 3, YC[2][1] = 0, YC[2][2] = -3;
-
-}
-
-/*int main(){
-
-	Mat im = imread("C:/Users/Пухкий Константин/Desktop/Test_OpenCV_001/5x5.jpg");
-	if (im.empty()) cout << "Cannot load image!" << endl;
-	imshow("5x5", im);
-
-	for (usi i = 1; i <= 3; i++){
-		for (si c = 2; c >= 0; c--){
-			for (usi j = 1; j <= 3; j++){
-				cout << int(im.at<Vec3b>(i, j)[c]) << ' ';}
-			cout << endl;}
-		cout << endl;}
-	
-	
-	si XC[3][3];
-	si YC[3][3];
-	sobel_core(XC, YC);
-	si sum_x = 0, sum_y = 0;
-	si pix = 0, pix_x = 0, pix_y = 0;
-
-	Mat frame;
-	im.copyTo(frame);
-
-	for (usi i = 0; i < frame.rows; i++){
-		for (usi j = 0; j < frame.cols; j++){
-			sum_x = 0, sum_y = 0;
-			if (i == 0 || i == frame.rows - 1 || j == 0 || j == frame.cols - 1) pix = 0;
-			else{
-				for (si x = -1; x < 2; x++){
-					for (si y = -1; y < 2; y++){
-
-						pix_x = i + x;
-						pix_y = j + y;
-
-						sum_x = sum_x + (im.at<Vec3b>(pix_x, pix_y)[R]) * XC[x + 1][y + 1];
-						sum_y = sum_y + (im.at<Vec3b>(pix_x, pix_y)[R]) * YC[x + 1][y + 1];
-					}
-				}
-				pix = sqrt(pow(sum_x, 2) + pow(sum_y, 2));
-			}
-
-
-			//if (pix > 255) pix = 255;
-			//if (pix < 0) pix = 0;
-			frame.at<Vec3b>(i, j)[R] = pix;
-			frame.at<Vec3b>(i, j)[G] = pix;
-			frame.at<Vec3b>(i, j)[B] = pix;
-		}
-	}
-
-	cout << endl << "--------------------------------------------" << endl;
-	for (usi i = 1; i <= 3; i++){
-		for (si c = 2; c >= 0; c--){
-			for (usi j = 1; j <= 3; j++){
-				cout << int(im.at<Vec3b>(i, j)[c]) << ' ';
-			}
-			cout << endl;
-		}
-		cout << endl;
-	}
-	cout << endl << "--------------------------------------------" << endl;
-	for (usi i = 1; i <= 3; i++){
-		for (si c = 2; c >= 0; c--){
-			for (usi j = 1; j <= 3; j++){
-				cout << int(frame.at<Vec3b>(i, j)[c]) << ' ';
-			}
-			cout << endl;
-		}
-		cout << endl;
-	}
-	cout << endl << "--------------------------------------------" << endl;
-
-	waitKey(0);
-	return 0;
-}*/
-
-/*int main(int argc, char** argv){
-	//VideoCapture cap(0); // open the video camera no. 0
-	//if (!cap.isOpened()){  // if not success, exit program
-	//	cout << "Cannot open the video cam" << endl;}
-	//
-	//double dWidth = cap.get(CV_CAP_PROP_FRAME_WIDTH); //get the width of frames of the video
-	//double dHeight = cap.get(CV_CAP_PROP_FRAME_HEIGHT); //get the height of frames of the video
-	//
-	//cout << "Frame size : " << dWidth << " x " << dHeight << endl;
-
-	test_img();
-
-
-	//namedWindow("Picture", CV_WINDOW_AUTOSIZE); //create a window called "MyVideo"
-	//namedWindow("My_video_pol", CV_WINDOW_AUTOSIZE);
-	//namedWindow("My_video_sob", CV_WINDOW_AUTOSIZE);
-
-	//Mat frame;
-	//Mat sobel;
-	//usi pol = 0;
-	//si XC[3][3];
-	//si YC[3][3];
-	//sobel_core(XC, YC);
-	////sharr_core(XC, YC);
-	//usi pix_x = 0, pix_y = 0;
-	//int sum_x = 0, sum_y = 0;
-	//int pix = 0;
-	//
-	//while (1){
-	//	bool bSuccess = cap.read(frame); // read a new frame from video
-	//	if (!bSuccess){ //if not success, break loop
-	//		cout << "Cannot read a frame from video stream" << endl;
-	//		getchar();
-	//		break;}
-	//	imshow("MyVideo", frame); //show the frame in "MyVideo" window
-		
-		//frame.copyTo(sobel);
-		//
-		//for (usi i = 0; i < frame.rows; i++){
-		//	for (usi j = 0; j < frame.cols; j++){
-		//		pol = ((frame.at<Vec3b>(i, j)[R]) + (frame.at<Vec3b>(i, j)[G]) + (frame.at<Vec3b>(i, j)[B])) / 3;
-		//		frame.at<Vec3b>(i, j)[R] = pol;
-		//		frame.at<Vec3b>(i, j)[G] = pol;
-		//		frame.at<Vec3b>(i, j)[B] = pol;}}
-		//imshow("My_video_pol", frame);
-		//
-		//for (usi i = 0; i < frame.rows; i++){
-		//	for (usi j = 0; j < frame.cols; j++){
-		//		sum_x = 0, sum_y = 0;
-		//		if (i == 0 || i == frame.rows - 1 || j == 0 || j == frame.cols - 1) pix = 0;
-		//		else{
-		//			for (si x = -1; x < 2; x++){
-		//				for (si y = -1; y < 2; y++){
-		//					pix_x = i + x;
-		//					pix_y = j + y;
-		//					sum_x += (frame.at<Vec3b>(pix_x, pix_y)[R]) * XC[x + 1][y + 1];
-		//					sum_y += (frame.at<Vec3b>(pix_x, pix_y)[R]) * YC[x + 1][y + 1];}}
-		//
-		//		pix = sqrt(pow(sum_x,2) + pow(sum_y,2));}
-		//		if (pix > 255) pix = 255;
-		//		sobel.at<Vec3b>(i, j)[R] = pix;
-		//		sobel.at<Vec3b>(i, j)[G] = pix;
-		//		sobel.at<Vec3b>(i, j)[B] = pix;}}
-		//
-		//imshow("My_video_sob", sobel);
-
-	//	if (waitKey(30) == 27){ //wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
-	//		cout << "esc key is pressed by user" << endl;
-	//		break;}}
-	
-	
-	getchar();
-	return 0;}
-
-//using namespace gpu;
-
-//int lol(){
-//	try	{
-//
-//		Mat src_host = imread("file.png", CV_LOAD_IMAGE_GRAYSCALE); // 8bit gray
-//		GpuMat dst, src; // тоже самое что и Mat но в памяти gpu
-//		
-//		src.upload(src_host); // загрузка картинки в память gpu
-//
-//		threshold(src, dst, 128.0, 255.0, CV_THRESH_BINARY); //фильтр
-//
-//		Mat result_host;
-//
-//		dst.download(result_host); // выгрузка картинки с памяти gpu
-//
-//		imshow("Result", result_host);
-//		waitKey();
-//	}
-//
-//	catch (const cv::Exception& ex){cout << "Error: " << ex.what() << std::endl;}
-//	return 0;
-//}*/
