@@ -66,6 +66,11 @@ int main(int argc, char* argv[]){
 	cvCanny(sobel, dst, 10, 100, 3);
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@//
+	Mat ing_1 = imread("car.jpg");
+	Mat ing_2 = imread("car.jpg");
+
+	integral(ing_1, ing_2);
+
 	uchar* nfin;
 	for (int x = 0; x < image->height; x++) {
 		for (int y = 0; y < image->width; y++) {
@@ -162,12 +167,9 @@ int main(int argc, char* argv[]){
 	cvNamedWindow("sv", CV_WINDOW_AUTOSIZE), cvShowImage("sv", sv);
 	
 	cvWaitKey(0);
-
-	// îñâîáîæäàåì ðåñóðñû
 	cvReleaseImage(&image);
 	cvReleaseImage(&gray);
 	cvReleaseImage(&dst);
-	// óäàëÿåì îêíà
 	cvDestroyAllWindows();
 	return 0;
 }
