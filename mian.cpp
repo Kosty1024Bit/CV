@@ -33,18 +33,14 @@ IplImage* fin = 0;
 IplImage* sv = 0;
 
 int main(int argc, char* argv[]){
-	// èìÿ êàðòèíêè çàäà¸òñÿ ïåðâûì ïàðàìåòðîì
+
 	char* filename = argc == 2 ? argv[1] : "car.jpg";
-	// ïîëó÷àåì êàðòèíêó
 	image = cvLoadImage(filename, CV_LOAD_IMAGE_COLOR);
 
 	fin = cvCloneImage(image);
 
-	// ñîçäà¸ì îäíîêàíàëüíûå êàðòèíêè
 	gray = cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
 	dst = cvCreateImage(cvGetSize(image), IPL_DEPTH_8U, 1);
-
-	// ïðåîáðàçóåì â ãðàäàöèè ñåðîãî
 	cvCvtColor(image, gray, CV_RGB2GRAY);
 
 	sobel = cvCreateImage(cvGetSize(gray), IPL_DEPTH_8U, 1);
@@ -70,73 +66,43 @@ int main(int argc, char* argv[]){
 	cvCanny(sobel, dst, 10, 100, 3);
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@//
-	float k = 1; // 0.0 - 1.0
-	Mat in_arr = cvarrToMat(dst);
-	Mat out_arr = cvarrToMat(dst);
+	uchar* nfin;
+	for (int x = 0; x < image->height; x++) {
+		for (int y = 0; y < image->width; y++) {
 
-	for (int y = 0; y < dst->height; y++){
-		uchar* ptr = (uchar*)(dst->imageData + y * dst->widthStep);
-		for (int x = 0; x < dst->width; x++){
-			if (ptr[x] == 255)ptr[x] = 0;
-			else ptr[x] = 255;}}
-
-	distanceTransform(in_arr, out_arr, CV_DIST_L1, CV_DIST_MASK_3);
-
-	for (int x = 0; x < out_arr.rows; x++) {
-		for (int y = 0; y < out_arr.cols; y++) {
-			out_arr.at<float>(x, y) *= k;
-		}
-	}
-	uchar* ptr_fin = 0;
-	uchar* ptr = 0;
-
-	for (int x = 20; x < fin->height - 20; x++) {
-		for (int y = 20; y < fin->width - 20; y++) {
-			//ptr_im[3 * x + 0] image blue
-			//ptr_im[3 * x + 1] image green
-			//ptr_im[3 * x + 2] image red
-			//out_arr.at<float>(x, y) distance
-			float sum_blue = 0;
-			float sum_green = 0;
-			float sum_red = 0;
+			int k = 1;
 			int p_dst = (int)out_arr.at<float>(x, y);
-
 			if (p_dst % 2 == 0)p_dst--;
-			p_dst--;
+			int pls = (int)p_dst / (int)2;
 
-			for (int i = -p_dst / 2; i < p_dst / 2; i++) {
-				for (int j = -p_dst / 2; j < p_dst / 2; j++) {
-					
-					ptr_fin = (uchar*)(fin->imageData + (x + j) * fin->widthStep);
+			int dedx = p_dst * k;
+			int dedy = dedx * 3;
 
-					sum_blue  += ptr_fin[3 * (y + i) + 0];
-					sum_green += ptr_fin[3 * (y + i) + 1];
-					sum_red   += ptr_fin[3 * (y + i) + 2];
-				}
+			int ing_x = x + pls;
+			
+			int ing_y = (y + pls) * 3;
+
+			int sum_b = 0;
+			int sum_g = 0;
+			int sum_r = 0;
+
+			nfin = (uchar*)(fin->imageData + x * fin->widthStep);
+
+			if ((ing_x - dedx > 0 && ing_y - dedy > 0) && (ing_x < image->height && ing_y < image->width)) {
+
+				sum_b = ing_2.at<int>(ing_x, ing_y + 0) - ing_2.at<int>(ing_x - dedx, ing_y + 0) - ing_2.at<int>(ing_x, ing_y - dedy + 0) + ing_2.at<int>(ing_x - dedx, ing_y - dedy + 0);
+				sum_g = ing_2.at<int>(ing_x, ing_y + 1) - ing_2.at<int>(ing_x - dedx, ing_y + 1) - ing_2.at<int>(ing_x, ing_y - dedy + 1) + ing_2.at<int>(ing_x - dedx, ing_y - dedy + 1);
+				sum_r = ing_2.at<int>(ing_x, ing_y + 2) - ing_2.at<int>(ing_x - dedx, ing_y + 2) - ing_2.at<int>(ing_x, ing_y - dedy + 2) + ing_2.at<int>(ing_x - dedx, ing_y - dedy + 2);
+			
+				nfin[3 * y + 0] = sum_b / (dedx * dedx);
+				nfin[3 * y + 1] = sum_g / (dedx * dedx);
+				nfin[3 * y + 2] = sum_r / (dedx * dedx);
 			}
-		
-			sum_blue  /= (p_dst * p_dst);
-			sum_red   /= (p_dst * p_dst);
-			sum_green /= (p_dst * p_dst);
-
-			ptr_fin = (uchar*)(fin->imageData + x * fin->widthStep);
-
-			if (sum_blue > 255) sum_blue = 255;
-			if (sum_blue < 0)   sum_blue = 0;
-			if (sum_green > 255) sum_green = 255;
-			if (sum_green < 0)	 sum_green = 0;
-			if (sum_red > 255) sum_red = 255;
-			if (sum_red < 0)   sum_red = 0;
-
-			ptr_fin[3 * y + 0] = sum_blue;
-			ptr_fin[3 * y + 1] = sum_green;
-			ptr_fin[3 * y + 2] = sum_red;
-
-			if (ptr_fin[3 * y + 0] == 0 && ptr_fin[3 * y + 1] == 0 && ptr_fin[3 * y + 2] == 0) {
-				ptr = (uchar*)(image->imageData + x * image->widthStep);
-				ptr_fin[3 * y + 0] = ptr[3 * y + 0];
-				ptr_fin[3 * y + 1] = ptr[3 * y + 1];
-				ptr_fin[3 * y + 2] = ptr[3 * y + 2];
+			else
+			{
+				nfin[3 * y + 0] = ing_1.at<Vec3b>(x, y)[0];
+				nfin[3 * y + 1] = ing_1.at<Vec3b>(x, y)[1];
+				nfin[3 * y + 2] = ing_1.at<Vec3b>(x, y)[2];
 			}
 		}
 	}
@@ -185,28 +151,16 @@ int main(int argc, char* argv[]){
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@//
 
-	// îêíî äëÿ îòîáðàæåíèÿ êàðòèíêè
-	cvNamedWindow("original", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow("gray", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow("cvCanny", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow("fin", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow("sv", CV_WINDOW_AUTOSIZE);
-
-	// ïîêàçûâàåì êàðòèíêè
-	cvShowImage("original", image);
-	cvShowImage("gray", gray);
-	cvShowImage("cvCanny", dst);
-	cvShowImage("fin", fin);
-	cvShowImage("sv", sv);
-
-	cvNamedWindow("sobel_x", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow("sobel_y", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow("sobel", CV_WINDOW_AUTOSIZE);
-	cvShowImage("sobel_x", sobel_x);
-	cvShowImage("sobel_y", sobel_y);
-	cvShowImage("sobel", sobel);
-
-	// æä¸ì íàæàòèÿ êëàâèøè
+	
+	cvNamedWindow("original", CV_WINDOW_AUTOSIZE), cvShowImage("original", image);
+	cvNamedWindow("gray", CV_WINDOW_AUTOSIZE), cvShowImage("gray", gray);
+	cvNamedWindow("cvCanny", CV_WINDOW_AUTOSIZE), cvShowImage("cvCanny", dst);
+	cvNamedWindow("sobel_x", CV_WINDOW_AUTOSIZE), cvShowImage("sobel_x", sobel_x);
+	cvNamedWindow("sobel_y", CV_WINDOW_AUTOSIZE), cvShowImage("sobel_y", sobel_y);
+	cvNamedWindow("sobel", CV_WINDOW_AUTOSIZE), cvShowImage("sobel", sobel);
+	cvNamedWindow("fin", CV_WINDOW_AUTOSIZE), cvShowImage("fin", fin);
+	cvNamedWindow("sv", CV_WINDOW_AUTOSIZE), cvShowImage("sv", sv);
+	
 	cvWaitKey(0);
 
 	// îñâîáîæäàåì ðåñóðñû
